@@ -1,0 +1,35 @@
+﻿@page "/productos"
+
+@using System.Net.Http
+@using System.Net.Http.Json
+@using BlazorCrud.Data
+@inject HttpClient http
+<h1>Productos</h1>
+
+
+<table class="table">
+    @if (_resp !=null && _resp.Data !=null)
+    {
+        @foreach(Producto prod in _resp.Data)
+        {
+    <tr>
+        <td>@prod.Id</td>
+         <td>@prod.Marca</td>
+          <td>@prod.Nombre</td>
+    </tr>
+    }
+    }
+</table>
+@code {
+    public string Url = "https://localhost:44303/api/Producto";
+
+    public Data.Respuesta _resp = new Data.Respuesta();
+   
+    
+    protected override async Task OnInitializedAsync() =>
+    
+     _resp = await http.GetFromJsonAsync<Data.Respuesta>(Url);
+
+    }
+
+

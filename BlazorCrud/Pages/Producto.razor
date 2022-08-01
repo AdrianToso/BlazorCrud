@@ -1,0 +1,50 @@
+﻿@page "/productos"
+
+@using System.Net.Http
+@using System.Net.Http.Json
+@using BlazorCrud.Data
+@inject HttpClient http
+<h1>Productos</h1>
+<div class="row">
+    <div class="col-12 text-right">
+       <a href="productoForm">Nuevo</a>
+    </div>
+    </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Cod.</th>
+            <th>Marca</th>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    @if (_resp !=null && _resp.Data !=null)
+    {
+        @foreach(var prod in _resp.Data)
+        {
+    <tr>
+        <td>@prod.Id</td>
+         <td>@prod.Marca</td>
+          <td>@prod.Nombre</td>
+          <td>
+              <a href="/productoForm/@prod.Id">Editar</a>
+              <a href="/deleteProducto/@prod.Id">Eliminar</a>
+          </td>
+    </tr>
+    }
+    }
+</table>
+@code {
+    public string Url = "/api/Producto";
+
+    public Data.Respuesta<List<Data.Producto>> _resp = new Data.Respuesta<List<Data.Producto>>();
+   
+    
+    protected override async Task OnInitializedAsync() =>
+    
+     _resp = await http.GetFromJsonAsync<Data.Respuesta<List<Data.Producto>>>(Url);
+
+    }
+
+
